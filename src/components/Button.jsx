@@ -61,7 +61,7 @@ export default function Button({
         return "text-white bg-[#31CD54] ring-[#31CD54] hover:bg-green-500 hover:ring-green-500";
 
       case "warning":
-        return "text-white bg-yellow-io ring-yellow-io hover:bg-yellow-400 hover:ring-yellow-400";
+        return "text-white bg-yellow-400 ring-yellow-io hover:bg-yellow-300 hover:ring-yellow-300";
 
       default:
         return "text-slate-700 bg-white ring-slate-300 hover:bg-slate-50";
