@@ -4,14 +4,21 @@ import Button from "./components/Button";
 import Table from "./components/Table";
 import Form from "./components/Form";
 import { capitalize, formatDate } from "./lib/helper";
+import UserDetail from "./components/UserDetail";
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [detailData, setDetailData] = useState(null);
   const handleSubmit = (formData) => {};
   const handleOpenEdit = (data) => {
     setEditData(data);
     setOpenForm(true);
+  };
+  const handleOpenDetail = (data) => {
+    setDetailData(data);
+    setOpenDetail(true);
   };
   return (
     <>
@@ -26,7 +33,7 @@ function App() {
         </Button>
         <Table
           headers={HEADER}
-          contents={mappingData(SAMPLE_DATA, handleOpenEdit)}
+          contents={mappingData(SAMPLE_DATA, handleOpenEdit, handleOpenDetail)}
           border
         />
       </div>
@@ -36,6 +43,12 @@ function App() {
         onClose={() => setOpenForm(false)}
         onSubmit={(formData) => handleSubmit(formData)}
         initData={editData}
+      />
+
+      <UserDetail
+        open={openDetail}
+        onClose={() => setOpenDetail(false)}
+        userData={detailData}
       />
     </>
   );
@@ -89,7 +102,7 @@ const SAMPLE_DATA = [
   },
 ];
 
-const mappingData = (data, handleOpenEdit) => {
+const mappingData = (data, handleOpenEdit, handleOpenDetail) => {
   const mappedData = [];
   data.forEach((item, index) => {
     mappedData.push([
@@ -120,7 +133,12 @@ const mappingData = (data, handleOpenEdit) => {
       {
         custom: (
           <div className="flex gap-x-5 ">
-            <Button variant="primary" className="rounded-md" size="xs">
+            <Button
+              variant="primary"
+              className="rounded-md"
+              size="xs"
+              onClick={() => handleOpenDetail(item)}
+            >
               Detail
             </Button>
             <Button variant="danger" className="rounded-md" size="xs">
