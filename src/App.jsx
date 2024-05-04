@@ -5,12 +5,15 @@ import Table from "./components/Table";
 import Form from "./components/Form";
 import { capitalize, formatDate } from "./lib/helper";
 import UserDetail from "./components/UserDetail";
+import UserDelete from "./components/UserDelete";
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
   const [editData, setEditData] = useState(null);
   const [openDetail, setOpenDetail] = useState(false);
   const [detailData, setDetailData] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteData, setDeleteData] = useState(null);
   const handleSubmit = (formData) => {};
   const handleOpenEdit = (data) => {
     setEditData(data);
@@ -19,6 +22,14 @@ function App() {
   const handleOpenDetail = (data) => {
     setDetailData(data);
     setOpenDetail(true);
+  };
+  const handleOpenDelete = (data) => {
+    setDeleteData(data);
+    setOpenDelete(true);
+  };
+  const handleDelete = () => {
+    setDeleteData(null);
+    setOpenDelete(false);
   };
   return (
     <>
@@ -33,7 +44,12 @@ function App() {
         </Button>
         <Table
           headers={HEADER}
-          contents={mappingData(SAMPLE_DATA, handleOpenEdit, handleOpenDetail)}
+          contents={mappingData(
+            SAMPLE_DATA,
+            handleOpenEdit,
+            handleOpenDetail,
+            handleOpenDelete
+          )}
           border
         />
       </div>
@@ -49,6 +65,13 @@ function App() {
         open={openDetail}
         onClose={() => setOpenDetail(false)}
         userData={detailData}
+      />
+
+      <UserDelete
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        onSubmit={() => handleDelete()}
+        userData={deleteData}
       />
     </>
   );
@@ -102,7 +125,12 @@ const SAMPLE_DATA = [
   },
 ];
 
-const mappingData = (data, handleOpenEdit, handleOpenDetail) => {
+const mappingData = (
+  data,
+  handleOpenEdit,
+  handleOpenDetail,
+  handleOpenDelete
+) => {
   const mappedData = [];
   data.forEach((item, index) => {
     mappedData.push([
@@ -141,7 +169,12 @@ const mappingData = (data, handleOpenEdit, handleOpenDetail) => {
             >
               Detail
             </Button>
-            <Button variant="danger" className="rounded-md" size="xs">
+            <Button
+              variant="danger"
+              className="rounded-md"
+              size="xs"
+              onClick={() => handleOpenDelete(item)}
+            >
               Delete
             </Button>
             <Button
