@@ -1,15 +1,21 @@
+import { useState } from "react";
 import "./App.css";
 import Button from "./components/Button";
 import Table from "./components/Table";
+import Form from "./components/Form";
 
 function App() {
+  const [openForm, setOpenForm] = useState();
   return (
-    <div className="flex flex-col gap-y-5">
-      <Button variant="primary" className="rounded-md" size="xs">
-        Tambah Data
-      </Button>
-      <Table headers={HEADER} contents={mappingData(SAMPLE_DATA)} border />
-    </div>
+    <>
+      <div className="flex flex-col gap-y-5">
+        <Button variant="primary" className="rounded-md" size="xs" onClick={() => setOpenForm(true)}>
+          Tambah Data
+        </Button>
+        <Table headers={HEADER} contents={mappingData(SAMPLE_DATA)} border />
+      </div>
+      <Form open={openForm} handleOpen={(value) => setOpenForm(value)} />
+    </>
   );
 }
 
