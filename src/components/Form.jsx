@@ -1,8 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
+import Button from "./Button";
+
+const GENDER_DATA = [
+  {
+    label: "Pria",
+    value: "pria",
+  },
+  {
+    label: "Wanita",
+    value: "wanita",
+  },
+];
 
 const Form = (props) => {
-  const { open = false, handleOpen = () => {} } = props;
+  const {
+    open = false,
+    onOpen = () => {},
+    onClose = () => {},
+    onSubmit = () => {},
+    initData = null,
+  } = props;
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -10,9 +28,18 @@ const Form = (props) => {
     birthdate: null,
   });
 
+  useEffect(() => {
+    if (initData) {
+      setFormData(initData);
+    }
+  }, [initData]);
+
   return (
-    <Modal open={open} onClose={() => handleOpen(false)}>
-      <div className="bg-blue-600 rounded-lg p-16 space-y-3 text-white grid grid-cols-5 gap-x-5">
+    <Modal open={open} onClose={() => onClose()}>
+      <div className="bg-blue-600 rounded-lg px-16 py-10 space-y-3 text-white grid grid-cols-5 gap-x-5">
+        <div className="col-span-5 text-xl font-semibold text-center pb-10">
+          Form User Data
+        </div>
         <label htmlFor="name" className="text-white">
           Nama
         </label>
@@ -39,30 +66,23 @@ const Form = (props) => {
 
         <span> P/W </span>
         <div className="grid grid-cols-5 gap-y-2 col-span-4">
-          <input
-            type="radio"
-            name="gender"
-            id="pria"
-            value="pria"
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, gender: e.target.value }))
-            }
-          />
-          <label htmlFor="pria" className="col-span-4">
-            Pria
-          </label>
-          <input
-            type="radio"
-            name="gender"
-            id="wanita"
-            value="wanita"
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, gender: e.target.value }))
-            }
-          />
-          <label htmlFor="wanita" className="col-span-4">
-            Wanita
-          </label>
+          {GENDER_DATA.map((item) => (
+            <>
+              <input
+                type="radio"
+                name="gender"
+                id={item.value}
+                value={item.value}
+                checked={formData?.gender && item.value === formData.gender}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, gender: e.target.value }))
+                }
+              />
+              <label htmlFor={item.value} className="col-span-4">
+                {item.label}
+              </label>
+            </>
+          ))}
         </div>
 
         <label htmlFor="birthdate"> Tanggal Lahir </label>
@@ -71,10 +91,20 @@ const Form = (props) => {
           name=""
           id=""
           className="text-black col-span-4 h-7 px-2"
+          value={formData.birthdate}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, birthdate: e.target.value }))
           }
         />
+
+        <div className="flex justify-between col-span-5 pt-20">
+          <Button className="rounded-md" size="xs" onClick={() => onClose()}>
+            Batal
+          </Button>
+          <Button className="rounded-md" size="xs" onClick={() => onSubmit()}>
+            Simpan
+          </Button>
+        </div>
       </div>
     </Modal>
   );
