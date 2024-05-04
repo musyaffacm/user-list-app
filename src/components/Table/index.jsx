@@ -28,7 +28,7 @@ const Table = (props) => {
                 return (
                   <th
                     scope="col"
-                    className={`py-5 px-5 whitespace-nowrap capitalize ${header.className}`}
+                    className={`py-5 px-5 whitespace-nowrap capitalize bg-slate-400 ${header.className}`}
                     key={`head${index}`}
                   >
                     {header.text}
