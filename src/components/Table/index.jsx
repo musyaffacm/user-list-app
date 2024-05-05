@@ -1,23 +1,12 @@
-import React, { Fragment } from "react";
+import React from "react";
 import "./style.css";
 
 const Table = (props) => {
-  const {
-    headers,
-    contents,
-    emptyText = "Tidak ada data",
-    border = false,
-    isOverflowY = true,
-    isOverflowX = true,
-  } = props;
+  const { headers, contents, emptyText = "Tidak ada data" } = props;
   return (
     <>
       <div
-        className={`${isOverflowX && "overflow-x-auto"} ${
-          isOverflowY && "overflow-y-auto"
-        } hide-scroll relative ${
-          border && "border-[1px] border-slate-300 rounded-lg"
-        }`}
+        className={`overflow-x-auto overflow-y-auto hide-scroll relative border-[1px] border-slate-300 rounded-lg`}
       >
         <table
           className={`table-fixed w-full text-left font-medium text-[#484848]`}
