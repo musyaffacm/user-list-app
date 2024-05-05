@@ -15,7 +15,7 @@ import UserDelete from "./components/UserDelete";
 import useFetch from "./hooks/useFetch";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { GENDER_DATA } from "./constant/global";
-import { addUser, updateUser } from "./lib/api";
+import { addUser, deleteUser, updateUser } from "./lib/api";
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
@@ -59,7 +59,20 @@ function App() {
       });
       setLoading(false);
       setUserData(tempData);
+      setEditData(null);
       setOpenEdit(false);
+    }
+  };
+
+  const handleDelete = async (formData) => {
+    setLoading(true);
+    const result = await deleteUser(formData);
+    if (result.status === 200) {
+      const tempData = userData.filter((item) => item.id !== formData.id);
+      setLoading(false);
+      setUserData(tempData);
+      setDeleteData(null);
+      setOpenDelete(false);
     }
   };
 
@@ -81,11 +94,6 @@ function App() {
   const handleOpenDelete = (data) => {
     setDeleteData(data);
     setOpenDelete(true);
-  };
-
-  const handleDelete = () => {
-    setDeleteData(null);
-    setOpenDelete(false);
   };
 
   useEffect(() => {
@@ -143,7 +151,7 @@ function App() {
           onClose={() => setOpenForm(false)}
           onSubmit={(formData) => handleSubmit(formData)}
         />
-        
+
         <FormEdit
           open={openEdit}
           onOpen={() => setOpenEdit(true)}
@@ -161,7 +169,7 @@ function App() {
         <UserDelete
           open={openDelete}
           onClose={() => setOpenDelete(false)}
-          onSubmit={() => handleDelete()}
+          onSubmit={(formData) => handleDelete(formData)}
           userData={deleteData}
         />
       </>

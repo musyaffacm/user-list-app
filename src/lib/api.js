@@ -33,3 +33,16 @@ export const updateUser = async (formData) => {
 
   return result;
 };
+
+export const deleteUser = async (formData) => {
+  let result = {};
+  await axios
+    .delete(`https://dummyjson.com/users/${formData.id}`)
+    .then((res) => {
+      setTimeout(() => {}, 500); // menambahakan waktu loading
+      result = res;
+    })
+    .catch((err) => {});
+
+  return result;
+};

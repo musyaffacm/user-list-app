@@ -1,4 +1,4 @@
-import { capitalize, formatDate } from "../lib/helper";
+import { capitalize, formatDate, formatDateTime } from "../lib/helper";
 import Button from "./Button";
 import Modal from "./Modal";
 const UserDelete = (props) => {
@@ -29,19 +29,23 @@ const UserDelete = (props) => {
 
         <span className="text-white font-medium">Tanggal Lahir</span>
         <span className="text-white col-span-4">
-          {formatDate(userData?.birthdate)}
+          {formatDate(userData?.birthDate)}
         </span>
 
         <span className="text-white font-medium">Tanggal Input</span>
         <span className="text-white col-span-4">
-          {userData?.inputdate || "-"}
+          {formatDateTime(userData?.inputDate) || "-"}
         </span>
 
         <div className="col-span-5 pt-20 flex justify-between">
           <Button className="rounded-md" size="xs" onClick={() => onClose()}>
             Batal
           </Button>
-          <Button className="rounded-md" size="xs" onClick={() => onSubmit()}>
+          <Button
+            className="rounded-md"
+            size="xs"
+            onClick={() => onSubmit(userData)}
+          >
             Hapus
           </Button>
         </div>
