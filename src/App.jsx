@@ -28,11 +28,9 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const {
-    data: fetchData,
-    loading: fetchLoading,
-    error: fetchError,
-  } = useFetch(`https://dummyjson.com/users`);
+  const { data: fetchData, loading: fetchLoading } = useFetch(
+    `https://dummyjson.com/users`
+  );
 
   const handleSubmit = async (formData) => {
     setLoading(true);
@@ -131,7 +129,7 @@ function App() {
           <Button
             variant="primary"
             className="rounded-md"
-            size="md"
+            size="lg"
             onClick={() => setOpenForm(true)}
           >
             Tambah Data
@@ -243,7 +241,7 @@ const mappingData = (
             <Button
               variant="primary"
               className="rounded-md"
-              size="xs"
+              size="sm"
               onClick={() => handleOpenDetail(item)}
             >
               Detail
@@ -251,7 +249,7 @@ const mappingData = (
             <Button
               variant="danger"
               className="rounded-md"
-              size="xs"
+              size="sm"
               onClick={() => handleOpenDelete(item)}
             >
               Delete
@@ -259,14 +257,13 @@ const mappingData = (
             <Button
               variant="warning"
               className="rounded-md"
-              size="xs"
+              size="sm"
               onClick={() => handleOpenEdit(item)}
             >
               Edit
             </Button>
           </div>
         ),
-        // className: "w-3/12",
       },
     ]);
   });
