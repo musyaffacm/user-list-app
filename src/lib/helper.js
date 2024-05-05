@@ -49,4 +49,4 @@ export const getCurrentDateTime = () => {
     currentDate.getSeconds();
 
   return dateTime;
-};u
+};

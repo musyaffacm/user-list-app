@@ -16,3 +16,20 @@ export const addUser = async (formData) => {
 
   return result;
 };
+
+export const updateUser = async (formData) => {
+  let result = {};
+  await axios
+    .put(`https://dummyjson.com/users/${formData.id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((res) => {
+      setTimeout(() => {}, 500); // menambahakan waktu loading
+      result = res;
+    })
+    .catch((err) => {});
+
+  return result;
+};

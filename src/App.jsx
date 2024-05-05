@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Button from "./components/Button";
 import Table from "./components/Table";
-import Form from "./components/Form";
+import { Form as FormEdit } from "./components/Form";
+import { Form as FormAdd } from "./components/Form";
 import {
   capitalize,
   formatDate,
@@ -14,10 +15,11 @@ import UserDelete from "./components/UserDelete";
 import useFetch from "./hooks/useFetch";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { GENDER_DATA } from "./constant/global";
-import { addUser } from "./lib/api";
+import { addUser, updateUser } from "./lib/api";
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [openDetail, setOpenDetail] = useState(false);
   const [detailData, setDetailData] = useState(null);
@@ -45,26 +47,45 @@ function App() {
     }
   };
 
+  const handleSubmitEdit = async (formData) => {
+    setLoading(true);
+    const result = await updateUser(formData);
+    if (result.status === 200) {
+      const tempData = userData.map((item) => {
+        if (item.id === formData.id) {
+          return formData;
+        }
+        return item;
+      });
+      setLoading(false);
+      setUserData(tempData);
+      setOpenEdit(false);
+    }
+  };
+
   const handleOpenEdit = (data) => {
     setEditData(data);
-    setOpenForm(true);
+    setOpenEdit(true);
   };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+    setEditData(null);
+  };
+
   const handleOpenDetail = (data) => {
     setDetailData(data);
     setOpenDetail(true);
   };
+
   const handleOpenDelete = (data) => {
     setDeleteData(data);
     setOpenDelete(true);
   };
+
   const handleDelete = () => {
     setDeleteData(null);
     setOpenDelete(false);
-  };
-
-  const handleCloseForm = () => {
-    setOpenForm(false);
-    setEditData(null);
   };
 
   useEffect(() => {
@@ -116,11 +137,18 @@ function App() {
             border
           />
         </div>
-        <Form
+        <FormAdd
           open={openForm}
           onOpen={() => setOpenForm(true)}
-          onClose={() => handleCloseForm()}
+          onClose={() => setOpenForm(false)}
           onSubmit={(formData) => handleSubmit(formData)}
+        />
+        
+        <FormEdit
+          open={openEdit}
+          onOpen={() => setOpenEdit(true)}
+          onClose={() => handleCloseEdit()}
+          onSubmit={(formData) => handleSubmitEdit(formData)}
           initData={editData}
         />
 

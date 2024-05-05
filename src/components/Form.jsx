@@ -13,7 +13,7 @@ const GENDER_DATA = [
   },
 ];
 
-const Form = (props) => {
+export const Form = (props) => {
   const {
     open = false,
     onOpen = () => {},
