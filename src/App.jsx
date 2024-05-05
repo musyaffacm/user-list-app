@@ -3,12 +3,18 @@ import "./App.css";
 import Button from "./components/Button";
 import Table from "./components/Table";
 import Form from "./components/Form";
-import { capitalize, formatDate, formatDateTime } from "./lib/helper";
+import {
+  capitalize,
+  formatDate,
+  formatDateTime,
+  getCurrentDateTime,
+} from "./lib/helper";
 import UserDetail from "./components/UserDetail";
 import UserDelete from "./components/UserDelete";
 import useFetch from "./hooks/useFetch";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { GENDER_DATA } from "./constant/global";
+import { addUser } from "./lib/api";
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
@@ -18,6 +24,7 @@ function App() {
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteData, setDeleteData] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     data: fetchData,
@@ -25,7 +32,19 @@ function App() {
     error: fetchError,
   } = useFetch(`https://dummyjson.com/users`);
 
-  const handleSubmit = (formData) => {};
+  const handleSubmit = async (formData) => {
+    setLoading(true);
+    const result = await addUser(formData);
+    if (result.status === 200) {
+      setLoading(false);
+      setUserData((prev) => [
+        { ...formData, inputDate: getCurrentDateTime(), id: result.data.id },
+        ...prev,
+      ]);
+      setOpenForm(false);
+    }
+  };
+
   const handleOpenEdit = (data) => {
     setEditData(data);
     setOpenForm(true);
@@ -41,6 +60,11 @@ function App() {
   const handleDelete = () => {
     setDeleteData(null);
     setOpenDelete(false);
+  };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+    setEditData(null);
   };
 
   useEffect(() => {
@@ -67,6 +91,11 @@ function App() {
   if (userData) {
     return (
       <>
+        {loading && (
+          <div className="flex w-full h-full justify-center items-center absolute top-0 z-50 left-0">
+            <LoadingSpinner className="" />
+          </div>
+        )}
         <div className="flex flex-col gap-y-5">
           <Button
             variant="primary"
@@ -90,7 +119,7 @@ function App() {
         <Form
           open={openForm}
           onOpen={() => setOpenForm(true)}
-          onClose={() => setOpenForm(false)}
+          onClose={() => handleCloseForm()}
           onSubmit={(formData) => handleSubmit(formData)}
           initData={editData}
         />

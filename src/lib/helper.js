@@ -32,3 +32,21 @@ export const formatDateTime = (date, month = "long") => {
     })
     .replace(/pukul/g, "");
 };
+
+export const getCurrentDateTime = () => {
+  const currentDate = new Date();
+  const dateTime =
+    currentDate.getDate() +
+    "/" +
+    (currentDate.getMonth() + 1) +
+    "/" +
+    currentDate.getFullYear() +
+    " @ " +
+    currentDate.getHours() +
+    ":" +
+    currentDate.getMinutes() +
+    ":" +
+    currentDate.getSeconds();
+
+  return dateTime;
+};u

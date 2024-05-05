@@ -29,9 +29,14 @@ const Form = (props) => {
   });
 
   useEffect(() => {
-    if (initData) {
-      setFormData(initData);
-    }
+    setFormData(
+      initData || {
+        name: "",
+        address: "",
+        gender: "",
+        birthDate: null,
+      }
+    );
   }, [initData]);
 
   return (
@@ -101,7 +106,11 @@ const Form = (props) => {
           <Button className="rounded-md" size="xs" onClick={() => onClose()}>
             Batal
           </Button>
-          <Button className="rounded-md" size="xs" onClick={() => onSubmit()}>
+          <Button
+            className="rounded-md"
+            size="xs"
+            onClick={() => onSubmit(formData)}
+          >
             Simpan
           </Button>
         </div>
