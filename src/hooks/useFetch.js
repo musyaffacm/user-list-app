@@ -4,41 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 function useFetch(url, accessToken = null) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const fetch = useCallback(async () => {
     setLoading(true);
     setData(null);
-    setError(null);
-
-    const config = {
-      headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : null,
-        "app-id": "66366104e5c166a466e17d98",
-      },
-    };
 
     axios
-      .get(url, config)
+      .get(url)
       .then((res) => {
-        if (res.data.status && res.data.status === "failed") {
-          setData(null);
-          setError(res.data.message);
-        } else {
-          setData(res.data);
-          setError(null);
-        }
+        setData(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        if (err.code !== "ERR_CANCELED") {
-          if (err.message === undefined) {
-            setError("Service Error, Try again later");
-          } else {
-            setError(err.message);
-          }
-        }
-
         setLoading(false);
       });
   }, [url, accessToken]);
@@ -47,7 +24,7 @@ function useFetch(url, accessToken = null) {
     fetch();
   }, [fetch]);
 
-  return { data, loading, error, revalidate: fetch };
+  return { data, loading };
 }
 
 export default useFetch;
