@@ -1,21 +1,10 @@
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import Button from "./Button";
-import { capitalize, formatDate } from "../lib/helper";
+import { capitalize, formatDate, formatDateTime } from "../lib/helper";
 
 const UserDetail = (props) => {
   const { open = false, onClose = () => {}, userData = null } = props;
-
-  const GENDER_DATA = [
-    {
-      label: "Pria",
-      value: "pria",
-    },
-    {
-      label: "Wanita",
-      value: "wanita",
-    },
-  ];
 
   return (
     <Modal open={open} onClose={() => onClose()}>
@@ -38,12 +27,12 @@ const UserDetail = (props) => {
 
         <span className="text-white font-medium">Tanggal Lahir</span>
         <span className="text-white col-span-4">
-          {formatDate(userData?.birthdate)}
+          {formatDate(userData?.birthDate)}
         </span>
 
         <span className="text-white font-medium">Tanggal Input</span>
         <span className="text-white col-span-4">
-          {userData?.inputdate || "-"}
+          {formatDateTime(userData?.inputDate) || "-"}
         </span>
 
         <div className="col-span-5 pt-20">

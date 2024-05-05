@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Button from "./components/Button";
 import Table from "./components/Table";
 import Form from "./components/Form";
-import { capitalize, formatDate } from "./lib/helper";
+import { capitalize, formatDate, formatDateTime } from "./lib/helper";
 import UserDetail from "./components/UserDetail";
 import UserDelete from "./components/UserDelete";
+import useFetch from "./hooks/useFetch";
+import LoadingSpinner from "./components/LoadingSpinner";
+import { GENDER_DATA } from "./constant/global";
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
@@ -14,6 +17,14 @@ function App() {
   const [detailData, setDetailData] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteData, setDeleteData] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  const {
+    data: fetchData,
+    loading: fetchLoading,
+    error: fetchError,
+  } = useFetch(`https://dummyjson.com/users`);
+
   const handleSubmit = (formData) => {};
   const handleOpenEdit = (data) => {
     setEditData(data);
@@ -31,50 +42,74 @@ function App() {
     setDeleteData(null);
     setOpenDelete(false);
   };
-  return (
-    <>
-      <div className="flex flex-col gap-y-5">
-        <Button
-          variant="primary"
-          className="rounded-md"
-          size="xs"
-          onClick={() => setOpenForm(true)}
-        >
-          Tambah Data
-        </Button>
-        <Table
-          headers={HEADER}
-          contents={mappingData(
-            SAMPLE_DATA,
-            handleOpenEdit,
-            handleOpenDetail,
-            handleOpenDelete
-          )}
-          border
-        />
+
+  useEffect(() => {
+    if (fetchData) {
+      const tempData = fetchData?.users?.map((item) => ({
+        ...item,
+        name: item.firstName + " " + item.lastName,
+        address: item.address.city,
+        gender: GENDER_DATA[item.gender],
+        inputDate: "2024-05-16T17:53",
+      }));
+      setUserData(tempData);
+    }
+  }, [fetchLoading]);
+
+  if (fetchLoading) {
+    return (
+      <div className="flex w-full h-full justify-center items-center">
+        <LoadingSpinner className="absolute top-0" />
       </div>
-      <Form
-        open={openForm}
-        onOpen={() => setOpenForm(true)}
-        onClose={() => setOpenForm(false)}
-        onSubmit={(formData) => handleSubmit(formData)}
-        initData={editData}
-      />
+    );
+  }
 
-      <UserDetail
-        open={openDetail}
-        onClose={() => setOpenDetail(false)}
-        userData={detailData}
-      />
+  if (userData) {
+    return (
+      <>
+        <div className="flex flex-col gap-y-5">
+          <Button
+            variant="primary"
+            className="rounded-md"
+            size="xs"
+            onClick={() => setOpenForm(true)}
+          >
+            Tambah Data
+          </Button>
+          <Table
+            headers={HEADER}
+            contents={mappingData(
+              userData,
+              handleOpenEdit,
+              handleOpenDetail,
+              handleOpenDelete
+            )}
+            border
+          />
+        </div>
+        <Form
+          open={openForm}
+          onOpen={() => setOpenForm(true)}
+          onClose={() => setOpenForm(false)}
+          onSubmit={(formData) => handleSubmit(formData)}
+          initData={editData}
+        />
 
-      <UserDelete
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        onSubmit={() => handleDelete()}
-        userData={deleteData}
-      />
-    </>
-  );
+        <UserDetail
+          open={openDetail}
+          onClose={() => setOpenDetail(false)}
+          userData={detailData}
+        />
+
+        <UserDelete
+          open={openDelete}
+          onClose={() => setOpenDelete(false)}
+          onSubmit={() => handleDelete()}
+          userData={deleteData}
+        />
+      </>
+    );
+  }
 }
 
 const HEADER = [
@@ -139,6 +174,7 @@ const mappingData = (
         // className: "w-1/12",
       },
       {
+        // text: item.firstName + " " + item.lastName,
         text: item.name,
         // className: "w-1/12",
       },
@@ -151,11 +187,11 @@ const mappingData = (
         // className: "w-1/12",
       },
       {
-        text: formatDate(item.birthdate),
+        text: formatDate(item.birthDate),
         // className: "w-2/12",
       },
       {
-        text: item.inputdate,
+        text: formatDateTime(item.inputDate),
         // className: "w-2/12",
       },
       {

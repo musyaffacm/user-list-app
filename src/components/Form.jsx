@@ -25,7 +25,7 @@ const Form = (props) => {
     name: "",
     address: "",
     gender: "",
-    birthdate: null,
+    birthDate: null,
   });
 
   useEffect(() => {
@@ -85,15 +85,15 @@ const Form = (props) => {
           ))}
         </div>
 
-        <label htmlFor="birthdate"> Tanggal Lahir </label>
+        <label htmlFor="birthDate"> Tanggal Lahir </label>
         <input
           type="date"
           name=""
           id=""
           className="text-black col-span-4 h-7 px-2"
-          value={formData.birthdate}
+          value={formData.birthDate}
           onChange={(e) =>
-            setFormData((prev) => ({ ...prev, birthdate: e.target.value }))
+            setFormData((prev) => ({ ...prev, birthDate: e.target.value }))
           }
         />
 
