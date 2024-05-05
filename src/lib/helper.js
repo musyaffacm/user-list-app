@@ -15,3 +15,20 @@ export const formatDate = (date, month = "long") => {
     day: "numeric",
   });
 };
+
+export const formatDateTime = (date, month = "long") => {
+  if (!date) {
+    return "-";
+  }
+
+  return new Date(date)
+    .toLocaleString("id-id", {
+      year: "numeric",
+      month: month,
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    })
+    .replace(/pukul/g, "");
+};
