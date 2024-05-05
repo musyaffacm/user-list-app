@@ -38,11 +38,13 @@ function App() {
     setLoading(true);
     const result = await addUser(formData);
     if (result.status === 200) {
+      const tempData = {
+        ...formData,
+        inputDate: getCurrentDateTime(),
+        id: result.data.id,
+      };
       setLoading(false);
-      setUserData((prev) => [
-        { ...formData, inputDate: getCurrentDateTime(), id: result.data.id },
-        ...prev,
-      ]);
+      setUserData((prev) => [tempData, ...prev]);
       setOpenForm(false);
     }
   };
@@ -129,7 +131,7 @@ function App() {
           <Button
             variant="primary"
             className="rounded-md"
-            size="xs"
+            size="md"
             onClick={() => setOpenForm(true)}
           >
             Tambah Data
@@ -208,23 +210,6 @@ const HEADER = [
   },
 ];
 
-const SAMPLE_DATA = [
-  {
-    name: "Musyaffa Choirun Man",
-    address: "Baki",
-    gender: "pria",
-    birthdate: "2020-04-15",
-    inputdate: "05 Mei 2022 12:05",
-  },
-  {
-    name: "Hinata Hyuga",
-    address: "Jogja",
-    gender: "wanita",
-    birthdate: "2001-05-15",
-    inputdate: "06 Mei 2022 22:00",
-  },
-];
-
 const mappingData = (
   data,
   handleOpenEdit,
@@ -236,28 +221,21 @@ const mappingData = (
     mappedData.push([
       {
         text: index + 1,
-        // className: "w-1/12",
       },
       {
-        // text: item.firstName + " " + item.lastName,
         text: item.name,
-        // className: "w-1/12",
       },
       {
         text: item.address,
-        // className: "w-2/12",
       },
       {
         text: capitalize(item.gender),
-        // className: "w-1/12",
       },
       {
         text: formatDate(item.birthDate),
-        // className: "w-2/12",
       },
       {
         text: formatDateTime(item.inputDate),
-        // className: "w-2/12",
       },
       {
         custom: (
