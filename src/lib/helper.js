@@ -30,7 +30,9 @@ export const formatDateTime = (date, month = "long") => {
       minute: "numeric",
       second: "numeric",
     })
-    .replace(/pukul/g, "");
+    .replace(/\./g, ":")
+    .replace(/pukul/g, "")
+    ;
 };
 
 export const getCurrentDateTime = () => {
